@@ -15,14 +15,18 @@
             android:id="@+id/Checkbox"
             android:layout_width="wrap_content"
             android:layout_height="70dp"
-            android:buttonTint="@color/colorPrimaryDark"
             android:checked="false"
-            android:ellipsize="end"
-            android:textSize="17sp"
-            android:fontFamily="@font/fira_sans"
-            android:maxLines="1"
             android:text="my taskkk"
-            android:textColor="@color/white" />
+            android:ellipsize="end"
+            android:maxLines="1"
+            />
+
+        <TextView
+            android:id="@+id/textdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+
 
     </RelativeLayout>
 

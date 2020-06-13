@@ -9,6 +9,7 @@ public class TaskContract {
         public static final  String TABLE_NAME = "taskList";
         public static final  String COLUMN_NAME = "taskname";
         public static final  String COLUMN_TIMESTAMP = "timeStamp";
+        public static final String DATE= "date";
 
     }
 }

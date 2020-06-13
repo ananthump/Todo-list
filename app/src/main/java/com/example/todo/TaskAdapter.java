@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -37,15 +38,17 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 
     public class TaskViewHolder extends RecyclerView.ViewHolder {
         public CheckBox mcheckbox;
+        public TextView dateText;
 
         public TaskViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
             mcheckbox = itemView.findViewById(R.id.Checkbox);
+            dateText=itemView.findViewById(R.id.textdate);
 
 
             itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                    @Override
+                    public void onClick(View v) {
 
                         if(listener != null){
                             int position = getAdapterPosition();
@@ -97,8 +100,10 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         }
 
         String name = mcursor.getString(mcursor.getColumnIndex(TaskContract.TaskEntry.COLUMN_NAME));
+        String date = mcursor.getString(mcursor.getColumnIndex(TaskContract.TaskEntry.DATE));
         long id = mcursor.getLong(mcursor.getColumnIndex(TaskContract.TaskEntry._ID));
         holder.mcheckbox.setText(name);
+        holder.dateText.setText(date);
         holder.itemView.setTag(id);
     }
 

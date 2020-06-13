@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
             @Override
             public void onClick(View v) {
                 OpenDialog();
+
             }
 
             private void OpenDialog() {
@@ -81,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
                 pos = position;
                 Taskname = taskname;
 
+
                      OpenDialog();
 
             }
@@ -97,13 +99,14 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
     }
 
     @Override
-    public void applyText(String taskname) {
+    public void applyText(String taskname, String date) {
 
         if(taskname.trim().length()==0){
             return;
         }
         ContentValues cv = new ContentValues();
         cv.put(TaskContract.TaskEntry.COLUMN_NAME, taskname);
+        cv.put(TaskContract.TaskEntry.DATE, date);
         System.out.println(taskname);
         mDatabase.insert(TaskContract.TaskEntry.TABLE_NAME,null,cv);
         mAdapter.swapCursorinsert(getAllItems());
@@ -131,11 +134,11 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
     }
 
     @Override
-    public void UpdateText(String taskname) {
+    public void UpdateText(String taskname, String date) {
 
         ContentValues cv = new ContentValues();
         cv.put(TaskContract.TaskEntry.COLUMN_NAME, taskname);
-
+        cv.put(TaskContract.TaskEntry.DATE, date);
         mDatabase.update(TaskContract.TaskEntry.TABLE_NAME,cv,TaskContract.TaskEntry._ID + "=" + id,null);
         mAdapter.swapCursor(getAllItems());
 //        System.out.println(pos);

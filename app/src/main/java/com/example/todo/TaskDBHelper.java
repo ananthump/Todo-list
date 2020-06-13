@@ -20,6 +20,7 @@ public class TaskDBHelper extends SQLiteOpenHelper {
                 TaskEntry.TABLE_NAME + " (" +
                 TaskEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 TaskEntry.COLUMN_NAME + " TEXT NOT NULL, " +
+                TaskEntry.DATE + " TEXT NOT NULL," +
                 TaskEntry.COLUMN_TIMESTAMP + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
                 ");";
         db.execSQL(SQL_CREATE_TASKLIST_TABLE);
