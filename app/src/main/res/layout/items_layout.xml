@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardBackgroundColor="@color/grey"
+    app:cardCornerRadius="10dp"
+    android:layout_margin="4dp"
+    android:id="@+id/item_layout">
+    <RelativeLayout
+        android:layout_width="380dp"
+        android:layout_height="wrap_content">
+
+        <CheckBox
+            android:id="@+id/Checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:buttonTint="@color/colorPrimaryDark"
+            android:checked="false"
+            android:ellipsize="end"
+            android:textSize="17sp"
+            android:fontFamily="@font/fira_sans"
+            android:maxLines="1"
+            android:text="my taskkk"
+            android:textColor="@color/white" />
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
