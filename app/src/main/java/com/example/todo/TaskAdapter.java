@@ -104,7 +104,18 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         if (!mcursor.moveToPosition(position)) {
             return;
         }
-        String state = mcursor.getString(mcursor.getColumnIndex(TaskContract.TaskEntry.STATE));
+        int state = mcursor.getInt(mcursor.getColumnIndex(TaskContract.TaskEntry.STATE));
+
+        if(state==1)
+        {System.out.println("state of"+state);
+            holder.mcheckbox.setChecked(true);
+            holder. mcheckbox.setTextColor(mcontext.getResources().getColor(R.color.colorPrimaryDark));
+        }
+        else
+        {System.out.println("state of"+state);
+            holder.mcheckbox.setChecked(false);
+            holder.mcheckbox.setTextColor(mcontext.getResources().getColor(R.color.white));
+        }
 
         String name = mcursor.getString(mcursor.getColumnIndex(TaskContract.TaskEntry.COLUMN_NAME));
         String date = mcursor.getString(mcursor.getColumnIndex(TaskContract.TaskEntry.DATE));
