@@ -73,7 +73,7 @@ public class Dialog extends AppCompatDialogFragment {
                             @RequiresApi(api = Build.VERSION_CODES.O)
                             @Override
                             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                                SimpleDateFormat dateFormatter = new SimpleDateFormat("MM-dd-yyyy");
+                                SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
                                 calendar.set(Calendar.YEAR,datePicker.getYear());
                                 calendar.set(Calendar.MONTH,datePicker.getMonth());
                                 calendar.set(Calendar.DAY_OF_MONTH,datePicker.getDayOfMonth());

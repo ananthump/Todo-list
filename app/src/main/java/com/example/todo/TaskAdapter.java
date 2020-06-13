@@ -106,24 +106,30 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         }
         int state = mcursor.getInt(mcursor.getColumnIndex(TaskContract.TaskEntry.STATE));
 
-        if(state==1)
-        {System.out.println("state of"+state);
-            holder.mcheckbox.setChecked(true);
-            holder. mcheckbox.setTextColor(mcontext.getResources().getColor(R.color.colorPrimaryDark));
-        }
-        else
-        {System.out.println("state of"+state);
-            holder.mcheckbox.setChecked(false);
-            holder.mcheckbox.setTextColor(mcontext.getResources().getColor(R.color.white));
-        }
+
 
         String name = mcursor.getString(mcursor.getColumnIndex(TaskContract.TaskEntry.COLUMN_NAME));
         String date = mcursor.getString(mcursor.getColumnIndex(TaskContract.TaskEntry.DATE));
         long id = mcursor.getLong(mcursor.getColumnIndex(TaskContract.TaskEntry._ID));
         System.out.println("state"+state+"id"+id);
         holder.mcheckbox.setText(name);
-        holder.dateText.setText(date);
+        holder.dateText.setText("Due date : "+date);
         holder.itemView.setTag(id);
+
+        if(state==1)
+        {System.out.println("state of"+state);
+            holder.mcheckbox.setChecked(true);
+            holder. mcheckbox.setTextColor(mcontext.getResources().getColor(R.color.colorPrimaryDark));
+            holder. dateText.setTextColor(mcontext.getResources().getColor(R.color.green));
+            holder.dateText.setText("Task Completed");
+        }
+        else
+        {System.out.println("state of"+state);
+            holder.mcheckbox.setChecked(false);
+            holder.mcheckbox.setTextColor(mcontext.getResources().getColor(R.color.white));
+            holder.dateText.setTextColor(mcontext.getResources().getColor(R.color.white));
+
+        }
     }
 
     @Override
