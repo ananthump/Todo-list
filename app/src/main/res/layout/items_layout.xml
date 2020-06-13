@@ -17,6 +17,7 @@
             android:layout_height="70dp"
             android:checked="false"
             android:text="my taskkk"
+            android:textColor="@android:color/white"
             android:ellipsize="end"
             android:maxLines="1"
             />

@@ -7,13 +7,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.ContentValues;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.Toast;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
@@ -24,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
     private String Taskname;
     long id;
     int pos;
-    FloatingActionButton fl ;
+    FloatingActionButton fl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
         buildRecyclerView();
 
 
-        fl=findViewById(R.id.floatingActionButton);
+        fl = findViewById(R.id.floatingActionButton);
         fl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -47,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
 
             private void OpenDialog() {
                 Dialog dialog = new Dialog();
-                dialog.show(getSupportFragmentManager(),"Dialog ");
+                dialog.show(getSupportFragmentManager(), "Dialog ");
             }
         });
 
@@ -58,11 +57,11 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
         mRecyclerView = findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new TaskAdapter(this,getAllItems());
+        mAdapter = new TaskAdapter(this, getAllItems());
         mRecyclerView.setAdapter(mAdapter);
 
 
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 return false;
@@ -76,52 +75,63 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
 
         mAdapter.SetOnItemClickListener(new TaskAdapter.OnItemClickListener() {
             @Override
-            public void OnItemClick(int position,long Id,String taskname) {
+            public void OnItemClick(int position, long Id, String taskname) {
 
                 id = Id;
                 pos = position;
                 Taskname = taskname;
 
 
-                     OpenDialog();
+                OpenDialog();
 
             }
 
             @Override
-            public void oncheck(int position, CheckBox mcheckbox) {
+            public void oncheck(int position, CheckBox mcheckbox, long id) {
                 System.out.println(position);
+                long ID = id;
+                if (mcheckbox.isChecked()) {
+                    mcheckbox.setTextColor(getApplicationContext().getResources().getColor(R.color.colorPrimaryDark));
+                    ContentValues cv = new ContentValues();
+                    cv.put(TaskContract.TaskEntry.STATE,1);
+                    mDatabase.update(TaskContract.TaskEntry.TABLE_NAME, cv, TaskContract.TaskEntry._ID + "=" + id, null);
+                    mAdapter.swapCursor(getAllItems());
 
-
-
-               }
-          });
+                } else {
+                    mcheckbox.setTextColor(getApplicationContext().getResources().getColor(R.color.white));
+                    ContentValues cv = new ContentValues();
+                    cv.put(TaskContract.TaskEntry.STATE, 0);
+                    mDatabase.update(TaskContract.TaskEntry.TABLE_NAME, cv, TaskContract.TaskEntry._ID + "=" + id, null);
+                    mAdapter.swapCursor(getAllItems());
+                }
+            }
+        });
 
     }
 
     @Override
     public void applyText(String taskname, String date) {
 
-        if(taskname.trim().length()==0){
+        if (taskname.trim().length() == 0) {
             return;
         }
         ContentValues cv = new ContentValues();
         cv.put(TaskContract.TaskEntry.COLUMN_NAME, taskname);
         cv.put(TaskContract.TaskEntry.DATE, date);
         System.out.println(taskname);
-        mDatabase.insert(TaskContract.TaskEntry.TABLE_NAME,null,cv);
+        mDatabase.insert(TaskContract.TaskEntry.TABLE_NAME, null, cv);
         mAdapter.swapCursorinsert(getAllItems());
 
     }
 
-    private void removeItem(long id){
-         mDatabase.delete(TaskContract.TaskEntry.TABLE_NAME,
-                 TaskContract.TaskEntry._ID + "=" + id,null);
-         mAdapter.swapCursor(getAllItems());
+    private void removeItem(long id) {
+        mDatabase.delete(TaskContract.TaskEntry.TABLE_NAME,
+                TaskContract.TaskEntry._ID + "=" + id, null);
+        mAdapter.swapCursor(getAllItems());
     }
 
 
-
-    private Cursor getAllItems(){
+    private Cursor getAllItems() {
         return mDatabase.query(
                 TaskContract.TaskEntry.TABLE_NAME,
                 null,
@@ -129,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
                 null,
                 null,
                 null,
-                TaskContract.TaskEntry.COLUMN_TIMESTAMP +" DESC"
+                TaskContract.TaskEntry.COLUMN_TIMESTAMP + " DESC"
         );
     }
 
@@ -139,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
         ContentValues cv = new ContentValues();
         cv.put(TaskContract.TaskEntry.COLUMN_NAME, taskname);
         cv.put(TaskContract.TaskEntry.DATE, date);
-        mDatabase.update(TaskContract.TaskEntry.TABLE_NAME,cv,TaskContract.TaskEntry._ID + "=" + id,null);
+        mDatabase.update(TaskContract.TaskEntry.TABLE_NAME, cv, TaskContract.TaskEntry._ID + "=" + id, null);
         mAdapter.swapCursor(getAllItems());
 //        System.out.println(pos);
 //        System.out.println(id);
@@ -149,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements Dialog.DialogList
     private void OpenDialog() {
 
         UpdatedDialog updatedialog = new UpdatedDialog(Taskname);
-        updatedialog.show(getSupportFragmentManager(),"Dialog2");
+        updatedialog.show(getSupportFragmentManager(), "Dialog2");
     }
 
 

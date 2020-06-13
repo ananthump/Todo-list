@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,16 +15,17 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 
     private OnItemClickListener mListener;
     public static final String SHARED_PREF = "sharedprefs";
-    public static final String  CHECKBOX = "checkboxpref";
+    public static final String CHECKBOX = "checkboxpref";
 
-  public interface OnItemClickListener{
-      void OnItemClick(int position,long id,String name);
-      void  oncheck(int position,CheckBox mcheckbox);
-  }
+    public interface OnItemClickListener {
+        void OnItemClick(int position, long id, String name);
 
-  public void SetOnItemClickListener(OnItemClickListener listener){
-      mListener = listener;
-  }
+        void oncheck(int position, CheckBox mcheckbox, long id);
+    }
+
+    public void SetOnItemClickListener(OnItemClickListener listener) {
+        mListener = listener;
+    }
 
     private Context mcontext;
     private Cursor mcursor;
@@ -43,27 +43,27 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         public TaskViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
             mcheckbox = itemView.findViewById(R.id.Checkbox);
-            dateText=itemView.findViewById(R.id.textdate);
+            dateText = itemView.findViewById(R.id.textdate);
 
 
             itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
 
-                        if(listener != null){
-                            int position = getAdapterPosition();
+                    if (listener != null) {
+                        int position = getAdapterPosition();
 
-                            if (!mcursor.moveToPosition(position)) {
-                                return;
-                            }
-                            String name = mcursor.getString(mcursor.getColumnIndex(TaskContract.TaskEntry.COLUMN_NAME));
-                            long id = mcursor.getLong(mcursor.getColumnIndex(TaskContract.TaskEntry._ID));
-
-                            if(position != RecyclerView.NO_POSITION){
-                                listener.OnItemClick(position,id,name);
-                            }
-
+                        if (!mcursor.moveToPosition(position)) {
+                            return;
                         }
+                        String name = mcursor.getString(mcursor.getColumnIndex(TaskContract.TaskEntry.COLUMN_NAME));
+                        long id = mcursor.getLong(mcursor.getColumnIndex(TaskContract.TaskEntry._ID));
+
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.OnItemClick(position, id, name);
+                        }
+
+                    }
 
 
                 }
@@ -71,11 +71,17 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             mcheckbox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (!mcursor.moveToPosition(position)) {
+                        return;
+                    }
+                    long id = mcursor.getLong(mcursor.getColumnIndex(TaskContract.TaskEntry._ID));
+                    listener.oncheck(position,mcheckbox,id);
 
-                    if(mcheckbox.isChecked()){
-                        mcheckbox.setTextColor(mcontext.getResources().getColor(R.color.colorPrimaryDark));
-                } else
-                        mcheckbox.setTextColor(mcontext.getResources().getColor(R.color.white));
+//                    if (mcheckbox.isChecked()) {
+//                        mcheckbox.setTextColor(mcontext.getResources().getColor(R.color.colorPrimaryDark));
+//                    } else
+//                        mcheckbox.setTextColor(mcontext.getResources().getColor(R.color.white));
 
 
                 }
@@ -89,7 +95,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     public TaskViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mcontext);
         View view = inflater.inflate(R.layout.items_layout, parent, false);
-        return new TaskViewHolder(view,mListener);
+        return new TaskViewHolder(view, mListener);
     }
 
     @Override
@@ -98,10 +104,12 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         if (!mcursor.moveToPosition(position)) {
             return;
         }
+        String state = mcursor.getString(mcursor.getColumnIndex(TaskContract.TaskEntry.STATE));
 
         String name = mcursor.getString(mcursor.getColumnIndex(TaskContract.TaskEntry.COLUMN_NAME));
         String date = mcursor.getString(mcursor.getColumnIndex(TaskContract.TaskEntry.DATE));
         long id = mcursor.getLong(mcursor.getColumnIndex(TaskContract.TaskEntry._ID));
+        System.out.println("state"+state+"id"+id);
         holder.mcheckbox.setText(name);
         holder.dateText.setText(date);
         holder.itemView.setTag(id);
@@ -122,6 +130,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         }
 
     }
+
     public void swapCursorinsert(Cursor newCursor) {
         if (mcursor != null) {
             mcursor.close();

@@ -3,7 +3,9 @@ package com.example.todo;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
 import androidx.annotation.Nullable;
+
 import com.example.todo.TaskContract.*;
 
 public class TaskDBHelper extends SQLiteOpenHelper {
@@ -21,6 +23,7 @@ public class TaskDBHelper extends SQLiteOpenHelper {
                 TaskEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 TaskEntry.COLUMN_NAME + " TEXT NOT NULL, " +
                 TaskEntry.DATE + " TEXT NOT NULL," +
+                TaskEntry.STATE + " boolean default 0," +
                 TaskEntry.COLUMN_TIMESTAMP + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
                 ");";
         db.execSQL(SQL_CREATE_TASKLIST_TABLE);
@@ -29,7 +32,7 @@ public class TaskDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            db.execSQL("DROP TABLE IF EXISTS "+ TaskEntry.TABLE_NAME);
-            onCreate(db);
+        db.execSQL("DROP TABLE IF EXISTS " + TaskEntry.TABLE_NAME);
+        onCreate(db);
     }
 }
