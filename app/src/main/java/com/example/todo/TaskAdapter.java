@@ -11,9 +11,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
+import static java.sql.Types.NULL;
+
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
 
     private OnItemClickListener mListener;
+    public Date dt;
+    Date d1;
+    Date d2;
     public static final String SHARED_PREF = "sharedprefs";
     public static final String CHECKBOX = "checkboxpref";
 
@@ -39,11 +49,16 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     public class TaskViewHolder extends RecyclerView.ViewHolder {
         public CheckBox mcheckbox;
         public TextView dateText;
+        public TextView expText;
+
+
 
         public TaskViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
             mcheckbox = itemView.findViewById(R.id.Checkbox);
             dateText = itemView.findViewById(R.id.textdate);
+            expText=itemView.findViewById(R.id.expiretext);
+            Date dtf;
 
 
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -101,6 +116,9 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     @Override
     public void onBindViewHolder(@NonNull TaskViewHolder holder, int position) {
 
+
+
+
         if (!mcursor.moveToPosition(position)) {
             return;
         }
@@ -110,6 +128,40 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 
         String name = mcursor.getString(mcursor.getColumnIndex(TaskContract.TaskEntry.COLUMN_NAME));
         String date = mcursor.getString(mcursor.getColumnIndex(TaskContract.TaskEntry.DATE));
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy");
+
+
+        Calendar cal = Calendar.getInstance();
+        Date dt2=cal.getTime();
+        String datecur=dateFormatter.format(dt2);
+
+        try {
+            d2=dateFormatter.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        try {
+            d1=dateFormatter.parse(datecur);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if(d1.equals(d2)){
+            holder.expText.setText("Due Today");
+            holder. expText.setTextColor(mcontext.getResources().getColor(R.color.orange));
+        }
+        else if(d1.before(d2)){
+            holder.expText.setText("");
+        }
+        else if(d1.after(d2)){
+            holder.expText.setText("Date Expired");
+            holder. expText.setTextColor(mcontext.getResources().getColor(R.color.red));
+        }
+
+
+
+
+
         long id = mcursor.getLong(mcursor.getColumnIndex(TaskContract.TaskEntry._ID));
         System.out.println("state"+state+"id"+id);
         holder.mcheckbox.setText(name);
@@ -122,6 +174,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             holder. mcheckbox.setTextColor(mcontext.getResources().getColor(R.color.colorPrimaryDark));
             holder. dateText.setTextColor(mcontext.getResources().getColor(R.color.green));
             holder.dateText.setText("Task Completed");
+            holder.expText.setText("");
         }
         else
         {System.out.println("state of"+state);
