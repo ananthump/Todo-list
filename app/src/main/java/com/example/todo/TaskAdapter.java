@@ -24,8 +24,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     public Date dt;
     Date d1;
     Date d2;
-    public static final String SHARED_PREF = "sharedprefs";
-    public static final String CHECKBOX = "checkboxpref";
 
     public interface OnItemClickListener {
         void OnItemClick(int position, long id, String name);

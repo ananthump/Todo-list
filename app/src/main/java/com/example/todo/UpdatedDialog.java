@@ -67,9 +67,7 @@ public class UpdatedDialog extends AppCompatDialogFragment {
             @Override
             public void onClick(View v) {
                 calendar = Calendar.getInstance();
-                year = calendar.get(Calendar.YEAR);
-                month = calendar.get(Calendar.MONTH);
-                dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+
                 datePickerDialog = new DatePickerDialog(getActivity(),
                         new DatePickerDialog.OnDateSetListener() {
                             @RequiresApi(api = Build.VERSION_CODES.O)
